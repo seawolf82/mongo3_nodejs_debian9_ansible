@@ -1,0 +1,64 @@
+---
+
+- name: disable MongoDB service
+  systemd:
+    name: mongod
+    enabled: false
+  tags: mongodb  
+
+- name: Make sure MongoDB service is stopped
+  systemd:
+    state: stopped
+    name: mongod
+  tags: mongodb  
+
+
+
+- name: main | uninstall MongoDB packages
+  apt: >
+    pkg={{ item }}
+    state=absent
+    purge=yes
+    force=yes
+  with_items:
+    - mongodb-org*
+  tags: mongodb  
+
+
+- name: Remove useless packages from the cache
+  apt:
+    autoclean: yes
+  tags: mongodb  
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+  tags: mongodb  
+
+
+- name: Remove MongoDB repository
+  file:
+    path: /etc/apt/source.list.d/mongodb-org-3.6.list
+    state: absent
+  tags: mongodb  
+
+
+- name: Remove MongoDB log files and directory
+  file:
+    path: /var/log/mongodb
+    state: absent
+  tags: mongodb  
+
+
+- name: Remove MongoDB Database directory
+  file:
+    path: /var/lib/mongodb
+    state: absent
+  tags: mongodb  
+
+
+- name: removing firewall rules for 27017/tcp MongoDB
+  command: firewall-cmd --remove-port=27017/tcp --permanent
+  notify: Reloading firewalld rules
+  tags: mongodb  
+

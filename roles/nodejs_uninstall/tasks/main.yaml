@@ -1,0 +1,37 @@
+---
+
+
+- name: main | uninstall Nodejs packages
+  apt: >
+    pkg={{ item }}
+    state=absent
+    purge=yes
+    force=yes
+  with_items:
+    - nodejs
+    - node
+  tags: nodejs
+
+
+- name: Remove useless packages from the cache
+  apt:
+    autoclean: yes
+  tags: nodejs
+
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+  tags: nodejs
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+  tags: nodejs
+
+
+- name: Remove NodeJS repository
+  file:
+    path: /etc/apt/source.list.d/nodesource.list
+    state: absent
+  tags: nodejs
+

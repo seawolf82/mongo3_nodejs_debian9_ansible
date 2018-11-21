@@ -1,0 +1,28 @@
+---
+
+- name: Install NodeJs v10.x
+  shell: curl -sL https://deb.nodesource.com/setup_10.x | bash -
+  tags: nodejs
+
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+  tags: nodejs
+    
+
+- name: Install NodeJs V10.x
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - nodejs
+  tags: nodejs
+
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+  tags: nodejs
+
+

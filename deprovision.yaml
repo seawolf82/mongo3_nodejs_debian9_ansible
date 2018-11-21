@@ -1,0 +1,7 @@
+- name: Terminate running MongoDB, NodeJS and remove all files
+  hosts: dev-servers
+  remote_user: root
+  roles:
+    - mongodb_uninstall
+    - nodejs_uninstall
+
